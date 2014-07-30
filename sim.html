@@ -10,6 +10,13 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <style>
+        canvas {
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -23,8 +30,28 @@
     <img src='board.png' class="hidden" id="board-img"/>
     <div class="container">
         <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="number" id="players" placeholder="# of Players" required=""/>
+                    <input type="number" id="games" placeholder="# of Games" required=""/>
+                    <button class="btn btn-primary" type="button" onclick="run_sim();">Run Simulation</button>
+                </div>
+            </div>
+        </div class="row">
             <div class="col-md-12">
                 <canvas id="board" width="608" height="458"></canvas>
+            </div>
+        </div>
+        </div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Results</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group" id="results"></ul>
+                    </div>
+                  </div>
             </div>
         </div>
     </div>
@@ -216,17 +243,34 @@
             
             while (game.get_winner() < 0) {
                 game.take_turn();
-                console.log(game);
+            }
+            return game;
+        }
+        
+        function run_sim() {
+            $('#results').empty();
+            var num_players = $('#players').val();
+            var num_games = $('#games').val(); 
+            var wins = [];
+            for (var i = 0; i < num_players; i++) wins.push(0);
+            
+            for (var i = 0; i < num_games; i++) {
+                var game = do_game(num_players);
+                wins[game.get_winner()]++;
+            }
+            
+            for (var i = 0; i < num_players; i++) {
+                var percent = wins[i] * 100.0 / num_games;
+                $('#results').append('<li class="list-group-item">Player ' + (i+1) + ': ' + wins[i] + ' wins (' + percent + '%)');
             }
         }
         
-        do_game(20);
         $('#board').drawImage({
             source: $('#board-img')[0],
             fromCenter:false,
             layer: true,
             name: 'bg'
-        }).drawArc({
+        /*}).drawArc({
             fillStyle: 'black',
             x: 100, y: 100,
             radius: 50,
@@ -238,9 +282,10 @@
             radius: 50,
             layer: true,
             name: 'player1'
+        */
         });
-        $('#board').removeLayer('player1');
-        $('#board').draw();
+        //$('#board').removeLayer('player1');
+        //$('#board').drawLayers();
         //test();
     </script>
 </body>
