@@ -20,8 +20,12 @@
     <![endif]-->
 </head>
 <body>
+    <img src='board.png' class="hidden" id="board-img"/>
     <div class="container">
         <div class="row">
+            <div class="col-md-12">
+                <canvas id="board" width="608" height="458"></canvas>
+            </div>
         </div>
     </div>
 
@@ -30,7 +34,214 @@
     <!-- <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script> -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/jcanvas.min.js"></script>
     <script>
+        //+ Jonas Raoni Soares Silva
+        //@ http://jsfromhell.com/array/shuffle [v1.0]
+        function shuffle(o){ //v1.0
+            for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+            return o;
+        };
+        
+        function set(a) {
+            var s = {}
+            a.forEach(function(i) {
+                s[i] = true;
+            });
+            return s;
+        }
+        
+        function init() {
+            start = 's'
+            red = 'r'
+            purple = 'p'
+            yellow = 'y'
+            blue = 'b'
+            orange = 'o'
+            green = 'g'
+            plumpy = 'pl'
+            mint = 'm'
+            jolly = 'j'
+            nut = 'n'
+            lolly = 'l'
+            frostine = 'f'
+            end = 'e'
+            colors = [red,purple,yellow,blue,orange,green];
+            colors_set = set(colors);
+            characters = [plumpy, mint, jolly, nut, lolly, frostine];
+            characters_set = set(characters);
+            jumps = {}
+            jumps[plumpy] = 9
+            jumps[mint] = 18
+            jumps[jolly] = 43
+            jumps[nut] = 75
+            jumps[lolly] = 96
+            jumps[frostine] = 104
+            
+            //dots = [48, 86, 121]
+            rainbow = 5
+            gumdrop = 34
+            
+            board = [start]
+            for (var i = 0; i < 21; i++) {
+                    $.merge(board, [red,purple,yellow,blue,orange,green]);
+            }
+            board.push(red);
+            board.push(end);
+            characters.forEach(function(c) {
+                board.splice(jumps[c],0,c);
+            });
+
+            deck = []
+            colors.forEach(function(c) {
+                for (var j = 0; j < 8; j++) {
+                    card = {};
+                    card.color = c;
+                    card.double = false;
+                    deck.push(card);
+                }
+                for (var j = 0; j < 2; j++) {
+                    card = {};
+                    card.color = c;
+                    card.double = true;
+                    deck.push(card);
+                }
+            });
+            characters.forEach(function(c) {
+                card = {};
+                card.color = c;
+                deck.push(card);
+            });
+        }
+        
+        function card_to_str(card) {
+            var c = card.color;
+            if (c in colors_set && card.double) {
+                return c.toUpperCase();
+            } else {
+                return c;
+            }
+        }
+        
+        function deck_to_str(d) {
+            var cards = [];
+            d.forEach(function(card) {
+                cards.push(card_to_str(card));
+            });
+            return cards.join();
+        }
+        
+        function game_to_str(g) {
+            var game_stuff = [];
+            for (var i = 0; i < g.players.length; i++) {
+                game_stuff.push('Player ' + i + ': ' + g.players[i]);
+            }
+            if ('card' in g) {
+                game_stuff.push('Last card: ' + card_to_str(g.card));
+            }
+            game_stuff.push('Turns played: ' + g.turns);
+            game_stuff.push('Whose turn: ' + g.turn);
+            return game_stuff.join();
+        }
+        
+        function check_dots(current, card) {
+            if (current == 48 && card.color != yellow) return false;
+            if (current == 86 && card.color != blue) return false;
+            if (current == 121 && card.color != red) return false;
+            return true;
+        }
+        
+        function check_bridge(current) {
+            if (current == 5) return 59;
+            if (current == 34) return 47;
+            return current;
+        }
+        
+        function get_space(current, card) {
+            if (!check_dots(current, card)) return current;        
+            c = card.color;
+            
+            if (c in characters_set) {
+                return jumps[c];
+            } else {
+                var num = (card.double ? 2 : 1);
+                for (var i = 0; i < num; i++) {
+                    do {current++;} while(current < board.length - 1 && board[current] != c);
+                }
+                return check_bridge(current);
+            }
+        }
+
+        function get_winner() {
+            for (var i = 0; i < this.players.length; i++) {
+                if (board[this.players[i]] == end) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        
+        function draw_card() {
+            if (this.deck.length == 0) {
+                this.deck = shuffle(deck.slice(0));
+            }
+            return this.deck.pop();
+        }
+        
+        function take_turn() {
+            var card = this.draw_card();
+            this.players[this.turn] = get_space(this.players[this.turn], card);
+            this.card = card;
+            this.turns++;
+            this.turn = this.turns % this.players.length;
+        }
+        
+        function make_game(num_players) {
+            var game = {};
+            game.deck = []; 
+            game.players = [];
+            for (var i = 0; i < num_players; i++) game.players.push(0);
+            game.get_winner = get_winner;
+            game.take_turn = take_turn;
+            game.draw_card = draw_card;
+            game.turn = 0;
+            game.turns = 0;
+            return game;
+        }
+        
+        init();
+        
+        function do_game(num_players) {
+            var game = make_game(num_players);
+            
+            while (game.get_winner() < 0) {
+                game.take_turn();
+                console.log(game);
+            }
+        }
+        
+        do_game(20);
+        $('#board').drawImage({
+            source: $('#board-img')[0],
+            fromCenter:false,
+            layer: true,
+            name: 'bg'
+        }).drawArc({
+            fillStyle: 'black',
+            x: 100, y: 100,
+            radius: 50,
+            layer: true,
+            name: 'player1'
+        }).drawArc({
+            fillStyle: 'black',
+            x: 200, y: 100,
+            radius: 50,
+            layer: true,
+            name: 'player1'
+        });
+        $('#board').removeLayer('player1');
+        $('#board').draw();
+        //test();
     </script>
 </body>
 </html>
