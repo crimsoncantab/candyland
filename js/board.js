@@ -16,7 +16,7 @@ function set(a) {
 function init() {
     x_coords = [0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,19,19,18,17,16,15,14,13,12,11,11,11,12,13,14,15,16,17,18,19,19,19,18,17,16,15,14,13,12,11,10,9,9,9,9,8,7,6,5,4,3,2,1,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,11,11,10,9,8,7,6,6,6,7,8,9,10,11,12,13,14,15,16,17,18,19,19,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,4,4,4,4,3,2,1,0,0,0,0,0,1,2,2]
     y_coords = [13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,13,12,12,12,12,12,12,12,12,12,11,10,10,10,10,10,10,10,10,10,9,8,8,8,8,8,8,8,8,8,8,8,9,10,11,11,11,11,11,11,11,11,11,11,10,9,8,7,6,6,6,6,6,6,6,6,6,6,6,6,5,4,4,4,4,4,4,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,4,4,4,4,3,2,1,0,0,0,1]
-    player_colors = ['red','blue','green','yellow']
+    player_colors = ['darkred','darkblue','darkgreen','gold']
     
     start = 's'
     red = 'r'
@@ -157,8 +157,8 @@ function get_y_coord(position) {
 
 function render_position(player_id, position) {
     $('#board').drawArc({
-        fillStyle: player_colors[0],
-        strokeStyle: 'black',
+        fillStyle: player_colors[player_id],
+        //strokeStyle: 'black',
         x: get_x_coord(position), y: get_y_coord(position),
         radius: 6
     });
@@ -166,24 +166,11 @@ function render_position(player_id, position) {
 
 function render_move(player_id, old_pos, new_pos) {
    $('#board').drawLine({
-        strokeStyle: 'black',
+        strokeStyle: player_colors[player_id],
         x1: get_x_coord(old_pos), y1: get_y_coord(old_pos),
         x2: get_x_coord(new_pos), y2: get_y_coord(new_pos),
         strokeWidth: 3
-        //layer: true,
-        //name: 'player' + player_id,
-        //groups: ['players', 'paths']
     });
-/*             $('#board').draw({
-      fn: function(ctx) {
-        ctx.fillStyle = 'black';
-        ctx.beginPath();
-        ctx.moveTo(get_x_coord(old_pos), get_y_coord(old_pos));
-        ctx.lineTo(get_x_coord(new_pos), get_y_coord(new_pos));
-        ctx.stroke();
-      }
-    });
-    */
     render_position(player_id, new_pos);
 }
 
