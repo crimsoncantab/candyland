@@ -157,14 +157,11 @@ function get_y_coord(position) {
 
 function render_position(player_id, position) {
     $('#board').drawArc({
-    fillStyle: 'black',
-    x: get_x_coord(0), y: get_y_coord(0),
-    radius: 6
-}).drawArc({
-    fillStyle: player_colors[0],
-    x: get_x_coord(0), y: get_y_coord(0),
-    radius: 5
-});
+        fillStyle: player_colors[0],
+        strokeStyle: 'black',
+        x: get_x_coord(position), y: get_y_coord(position),
+        radius: 6
+    });
 }
 
 function render_move(player_id, old_pos, new_pos) {
@@ -172,7 +169,7 @@ function render_move(player_id, old_pos, new_pos) {
         strokeStyle: 'black',
         x1: get_x_coord(old_pos), y1: get_y_coord(old_pos),
         x2: get_x_coord(new_pos), y2: get_y_coord(new_pos),
-        strokeWidth: 3,
+        strokeWidth: 3
         //layer: true,
         //name: 'player' + player_id,
         //groups: ['players', 'paths']
@@ -199,9 +196,10 @@ function draw_card() {
 
 function take_turn() {
     var card = this.draw_card();
-    this.players[this.turn] = get_space(this.players[this.turn], card);
+    var old_pos = this.players[this.turn]
+    this.players[this.turn] = get_space(old_pos, card);
     if (do_drawing) {
-        render_position(this.turn, this.players[this.turn]);
+        render_move(this.turn, old_pos, this.players[this.turn]);
     }
     this.card = card;
     this.turns++;
@@ -296,7 +294,7 @@ $('#board').drawArc({
     fillStyle: player_colors[0],
     x: get_x_coord(0), y: get_y_coord(0),
     radius: 5
-});*/
-//$('#board').removeLayer('player1');
-//        $('#board').clearCanvas();
-//test();
+});
+$('#board').removeLayer('player1');
+$('#board').clearCanvas();
+*/
