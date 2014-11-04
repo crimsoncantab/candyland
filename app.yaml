@@ -10,6 +10,10 @@ handlers:
   static_files: sim.html
   upload: sim.html
 
+- url: /dominoes
+  static_files: dominoes.html
+  upload: dominoes.html
+
 - url: /(css|fonts|js|images)/(.*)
   static_files: \1/\2
   upload: /(css|fonts|js|images)/(.*)
