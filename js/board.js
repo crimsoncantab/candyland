@@ -157,7 +157,7 @@ function get_y_coord(position) {
 
 function render_position(player_id, position) {
     $('#board').drawArc({
-        fillStyle: player_colors[0],
+        fillStyle: player_colors[player_id],
         strokeStyle: 'black',
         x: get_x_coord(position), y: get_y_coord(position),
         radius: 6
@@ -166,7 +166,7 @@ function render_position(player_id, position) {
 
 function render_move(player_id, old_pos, new_pos) {
    $('#board').drawLine({
-        strokeStyle: 'black',
+        strokeStyle: player_colors[player_id],
         x1: get_x_coord(old_pos), y1: get_y_coord(old_pos),
         x2: get_x_coord(new_pos), y2: get_y_coord(new_pos),
         strokeWidth: 3
