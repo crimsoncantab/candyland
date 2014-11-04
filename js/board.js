@@ -174,16 +174,6 @@ function render_move(player_id, old_pos, new_pos) {
         //name: 'player' + player_id,
         //groups: ['players', 'paths']
     });
-/*             $('#board').draw({
-      fn: function(ctx) {
-        ctx.fillStyle = 'black';
-        ctx.beginPath();
-        ctx.moveTo(get_x_coord(old_pos), get_y_coord(old_pos));
-        ctx.lineTo(get_x_coord(new_pos), get_y_coord(new_pos));
-        ctx.stroke();
-      }
-    });
-    */
     render_position(player_id, new_pos);
 }
 
@@ -238,7 +228,7 @@ function run_sim() {
     
     for (var i = 0; i < num_games; i++) {
         $('#board').clearCanvas();
-        if (do_drawing) for (var i = 0; i < num_players; i++) {render_position(i,0);}
+        if (do_drawing) for (var j = 0; j < num_players; j++) {render_position(j,0);}
         var game = do_game(num_players);
         wins[game.get_winner()]++;
     }
@@ -251,50 +241,3 @@ function run_sim() {
 
 init();
 
-/*
-var canvas = document.getElementById("board");
-var context = canvas.getContext("2d");
-
-context.beginPath();
-context.moveTo(100, 150);
-context.lineTo(450, 50);
-context.stroke();
-$('#board').draw({
-    fn: function(ctx) {
-        ctx.fillStyle = 'black';
-        ctx.beginPath();
-        ctx.moveTo(get_x_coord(0), get_y_coord(0));
-        ctx.lineTo(get_x_coord(4), get_y_coord(4));
-        ctx.stroke();
-    }
-});
-$('#board').drawLine({
-  strokeStyle: '#000',
-  strokeWidth: 10,
-  x1: 100, y1: 50,
-  x2: 100, y2: 150
-});
-$('#board').drawArc({
-    fillStyle: 'black',
-    x: 100, y: 100,
-    radius: 50,
-    layer: true,
-    name: 'player1'
-}).drawArc({
-    fillStyle: 'black',
-    x: 200, y: 100,
-    radius: 50,
-    layer: true,
-    name: 'player1'
-}).drawArc({
-    fillStyle: 'black',
-    x: get_x_coord(0), y: get_y_coord(0),
-    radius: 6
-}).drawArc({
-    fillStyle: player_colors[0],
-    x: get_x_coord(0), y: get_y_coord(0),
-    radius: 5
-});
-$('#board').removeLayer('player1');
-$('#board').clearCanvas();
-*/

@@ -18,6 +18,8 @@
             display: block;
             /* from http://datagenetics.com/blog/december12011/index.html */
             background-image:url('images/board.png');
+            width:100%;
+            background-size: 100% 100%;
         }
         .row {
             padding-top: 10px;
@@ -35,7 +37,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-xs-4">
                 <div class="row">
                     <div>
                         <form class="form-horizontal" role="form">
@@ -81,7 +83,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-xs-8">
                 <canvas id="board" width="608" height="458"></canvas>
             </div>
         </div>
