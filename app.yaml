@@ -7,8 +7,8 @@ threadsafe: true
 handlers:
 
 - url: /candyland
-  static_files: sim.html
-  upload: sim.html
+  static_files: candyland.html
+  upload: candyland.html
 
 - url: /dominoes
   static_files: dominoes.html
