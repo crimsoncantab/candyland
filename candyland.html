@@ -26,9 +26,10 @@
             padding-bottom: 10px;
         }
         img {
-            display: block;
-            width: 100%;
+            display: inline;
+            width: 46%;
             height: auto;
+            padding: 10% 2%;
         }
     </style>
 
@@ -62,9 +63,13 @@
                     <div>
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label for="players" class="col-sm-4 control-label"># of Players</label>
-                                <div class="col-sm-8">
+                                <label for="players" class="col-sm-4 control-label">Players</label>
+                                <div class="col-sm-4">
                                     <input type="number" min="1" max="4" class="form-control" ng-model="num_players" placeholder="# of Players">
+                                </div>
+                                <div class="col-sm-4">
+                                    <button ng-hide="stop" class="btn btn-primary" type="button" ng-click="start_sim();">Run</button>
+                                    <button ng-show="stop" class="btn btn-primary" type="button" ng-click="stop_sim();">Pause</button>
                                 </div>
                             </div>
                             <!--div class="form-group">
@@ -82,33 +87,25 @@
                                     </div>
                                 </div>
                             </div-->
-                            <div class="form-group">
-                                <div class="col-sm-offset-4 col-sm-8">
-                                    <button ng-hide="stop" class="btn btn-primary" type="button" ng-click="start_sim();">Run Simulation</button>
-                                    <button ng-show="stop" class="btn btn-primary" type="button" ng-click="stop_sim();">Stop Simulation</button>
-                                </div>
-                            </div>
                         </form>
                     </div>
                 </div>
                 <div class="row">
-                    <div ng-show="game.card" class="col-xs-4 center-block">
+                    <div ng-show="game.card" class="col-xs-6 col-xs-offset-3" style="text-align: center; outline: 1px solid grey;">
                         <img src="images/{{game.card.color}}.png" />
-                    </div>
-                    <div ng-show="game.card.double" class="col-xs-4 center-block">
-                        <img src="images/{{game.card.color}}.png" />
+                        <img ng-show="game.card.double" src="images/{{game.card.color}}.png" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Results</h3>
+                            <h3 class="panel-title">Wins</h3>
                         </div>
                         <div class="panel-body">
                             <ul class="list-group" id="results">
-                                <li  class="list-group-item" ng-repeat="win in wins track by $index">Player {{$index+1}}: {{win}}
-                                <ng-pluralize count="win" when="{ one: 'win', other: 'wins' }"></ng-pluralize>
+                                <li  class="list-group-item" ng-repeat="win in wins track by $index"><span style="color:{{player_colors[$index]}}; font-weight: bold">{{player_names[$index]}}: {{win}}
                                 ({{win * 100.0 / (num_games?num_games:1)  | number:2}}%)
+                                </span>
                                 </li>
                             </ul>
                         </div>

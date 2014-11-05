@@ -5,6 +5,8 @@ angular.module('candy', [])
     $scope.wins = [0];
     $scope.num_games = 0;
     $scope.stop = null;
+    $scope.player_names = ['Red','Blue','Green','Yellow']
+    $scope.player_colors = canvas.player_colors;
     var reset_graphics = function() {
         canvas.reset();
         for (var j = 0; j < $scope.num_players; j++) {canvas.render_position(j,0);}
@@ -184,12 +186,13 @@ angular.module('candy', [])
   }]).
   factory('canvas', function() {
     var canvas = {};
-    var x_coords = [0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,19,19,18,17,16,15,14,13,12,11,11,11,12,13,14,15,16,17,18,19,19,19,18,17,16,15,14,13,12,11,10,9,9,9,9,8,7,6,5,4,3,2,1,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,11,11,10,9,8,7,6,6,6,7,8,9,10,11,12,13,14,15,16,17,18,19,19,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,4,4,4,4,3,2,1,0,0,0,0,0,1,2,2]
-    var y_coords = [13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,13,12,12,12,12,12,12,12,12,12,11,10,10,10,10,10,10,10,10,10,9,8,8,8,8,8,8,8,8,8,8,8,9,10,11,11,11,11,11,11,11,11,11,11,10,9,8,7,6,6,6,6,6,6,6,6,6,6,6,6,5,4,4,4,4,4,4,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,4,4,4,4,3,2,1,0,0,0,1]
-    var player_colors = ['darkred','darkblue','darkgreen','gold']
+    var x_coords = [0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,19,19,18,17,16,15,14,13,12,11,11,11,12,13,14,15,16,17,18,19,19,19,18,17,16,15,14,13,12,11,10,9,9,9,9,8,7,6,5,4,3,2,1,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,11,11,10,9,8,7,6,6,6,7,8,9,10,11,12,13,14,15,16,17,18,19,19,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,4,4,4,4,3,2,1,0,0,0,0,0,1,2,2];
+    var y_coords = [13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,13,12,12,12,12,12,12,12,12,12,11,10,10,10,10,10,10,10,10,10,9,8,8,8,8,8,8,8,8,8,8,8,9,10,11,11,11,11,11,11,11,11,11,11,10,9,8,7,6,6,6,6,6,6,6,6,6,6,6,6,5,4,4,4,4,4,4,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,4,4,4,4,3,2,1,0,0,0,1];
+    var player_colors = ['darkred','darkblue','darkgreen','gold'];
+    canvas.player_colors = player_colors;
 
-    var get_x_coord = function(position) {return 30.5 * x_coords[position] + 15;}
-    var get_y_coord = function(position) {return 30.5 * y_coords[position] + 15;}
+    var get_x_coord = function(position) {return 30.5 * x_coords[position] + 15;};
+    var get_y_coord = function(position) {return 30.5 * y_coords[position] + 15;};
 
     canvas.render_position = function(player_id, position) {
         $('#board-canvas').drawArc({
@@ -198,11 +201,11 @@ angular.module('candy', [])
             x: get_x_coord(position), y: get_y_coord(position),
             radius: 6
         });
-    }
+    };
 
     canvas.reset = function() {
         $('#board-canvas').clearCanvas();
-    }
+    };
 
     canvas.render_move = function(player_id, old_pos, new_pos) {
         $('#board-canvas').drawLine({
@@ -212,6 +215,6 @@ angular.module('candy', [])
             strokeWidth: 3
         });
         this.render_position(player_id, new_pos);
-    }
+    };
     return canvas;
   });
