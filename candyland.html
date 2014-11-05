@@ -75,25 +75,22 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div>
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Results</h3>
-                            </div>
-                            <div class="panel-body">
-                                <ul class="list-group" id="results">
-                                    <li ng-repeat="win in wins track by $index">Player {{$index+1}}: {{win}}
-                                    <ng-pluralize count="win" when="{ one: 'win', other: 'wins' }"></ng-pluralize>
-                                    ({{win * 100.0 / (num_games?num_games:1)}}%)
-                                    </li>
-                                </ul>
-                            </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Results</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-group" id="results">
+                                <li  class="list-group-item" ng-repeat="win in wins track by $index">Player {{$index+1}}: {{win}}
+                                <ng-pluralize count="win" when="{ one: 'win', other: 'wins' }"></ng-pluralize>
+                                ({{win * 100.0 / (num_games?num_games:1)  | number:2}}%)
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div>
-                        {{game.players}}
                     </div>
                 </div>
             </div>
