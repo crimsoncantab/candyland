@@ -7,6 +7,10 @@ from bottle import route, run, view, static_file, redirect, request, response, d
 def candyland():
     return static_file('sim.html', root='.')
 
+@route('/candy')
+def candyland():
+    return static_file('candyland.html', root='.')
+
 @route('/dominoes')
 def dominoes():
     return static_file('dominoes.html', root='.')
