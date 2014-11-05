@@ -25,7 +25,7 @@ angular.module('candy', [])
             var prev = $scope.game.take_turn();
             canvas.render_move(prev.turn, prev.pos, $scope.game.players[prev.turn]);
             
-        }, 10);
+        }, 200);
     };
     $scope.stop_sim = function() {
         if ($scope.stop) {
