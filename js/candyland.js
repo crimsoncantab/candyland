@@ -1,5 +1,5 @@
 angular.module('candy', [])
-  .controller('CandyController', ['$scope', '$interval', 'games', 'canvas', function($scope, $interval, games, canvas) {
+  .controller('CandyController', ['$scope', '$interval', 'games', 'canvas', 'simulator', function($scope, $interval, games, canvas, simulator) {
     $scope.num_players = 1;
     $scope.game = games.new_game($scope.num_players);
     $scope.wins = [0];
@@ -8,6 +8,7 @@ angular.module('candy', [])
     $scope.player_names = ['Red','Blue','Green','Yellow']
     $scope.player_colors = canvas.player_colors;
     $scope.speed = 200;
+    $scope.num_games = 1000;
     var reset_graphics = function() {
         canvas.reset();
         for (var j = 0; j < $scope.num_players; j++) {canvas.render_position(j,0);}
@@ -34,6 +35,9 @@ angular.module('candy', [])
             $scope.stop = null;
         }
     };
+    $scope.request_sim = function() {
+        simulator.simulate($scope.num_players, $scope.num_games, $scope);
+    };
     $scope.$watch('num_players', function(new_value, old_value) {
         $scope.wins = []
         for (var i = 0; i < new_value; i++) $scope.wins.push(0);
@@ -46,8 +50,22 @@ angular.module('candy', [])
         }
     });
   }]).
+  factory('simulator', [ '$http', 'board', 'decks', function($http, board, decks) {
+    var sim = {};
+    sim.simulate = function(num_players, num_games, $scope) {
+        $http.post('/simulate', {'board':board, 'deck':decks._master_deck, 'num_players':num_players, 'num_games': num_games}).
+        success(function(data, status, headers, config) {
+            $scope.wins = data;
+        }).
+        error(function(data, status, headers, config) {
+            alert(data);
+        });
+    }
+
+    return sim;
+  }]).
   factory('names', function() {
-    names = {};
+    var names = {};
     names.start = 's';
     names.red = 'r';
     names.purple = 'p';
