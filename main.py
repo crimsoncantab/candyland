@@ -19,7 +19,5 @@ def dominoes():
 def static(folder, path):
     return static_file(path, root=folder)
 
-# run(host='0.0.0.0', port=8080)
-app = run(host='localhost', port=8080)
-#app = default_app()
+app = default_app()
 

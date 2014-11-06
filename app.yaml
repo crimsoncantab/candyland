@@ -12,11 +12,11 @@ handlers:
 
 - url: /dominoes
   static_files: dominoes.html
-  upload: dominoes.html
 
+  upload: dominoes.html
 - url: /(css|fonts|js|images)/(.*)
   static_files: \1/\2
-  upload: /(css|fonts|js|images)/(.*)
+  upload: (css|fonts|js|images)/(.*)
 
 - url: /.*
   script: main.app
