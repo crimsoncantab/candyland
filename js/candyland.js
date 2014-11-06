@@ -1,20 +1,19 @@
 angular.module('candy', [])
   .controller('CandyController', ['$scope', '$interval', 'games', 'canvas', function($scope, $interval, games, canvas) {
-    $scope.game = null;
     $scope.num_players = 1;
+    $scope.game = games.new_game($scope.num_players);
     $scope.wins = [0];
     $scope.num_games = 0;
     $scope.stop = null;
     $scope.player_names = ['Red','Blue','Green','Yellow']
     $scope.player_colors = canvas.player_colors;
+    $scope.speed = 200;
     var reset_graphics = function() {
         canvas.reset();
         for (var j = 0; j < $scope.num_players; j++) {canvas.render_position(j,0);}
     }
     $scope.start_sim = function() {
         if ($scope.stop) return;
-        $scope.game = games.new_game($scope.num_players);
-        reset_graphics();
         $scope.stop = $interval(function() {
             if ($scope.game.winner != null) {
                 if ($scope.game.winner < $scope.wins.length) {
@@ -27,7 +26,7 @@ angular.module('candy', [])
             var prev = $scope.game.take_turn();
             canvas.render_move(prev.turn, prev.pos, $scope.game.players[prev.turn]);
             
-        }, 200);
+        }, $scope.speed);
     };
     $scope.stop_sim = function() {
         if ($scope.stop) {
@@ -39,6 +38,12 @@ angular.module('candy', [])
         $scope.wins = []
         for (var i = 0; i < new_value; i++) $scope.wins.push(0);
         $scope.num_games = 0;
+    });
+    $scope.$watch('speed', function(new_value, old_value) {
+        if ($scope.stop) {
+            $scope.stop_sim();
+            $scope.start_sim();
+        }
     });
   }]).
   factory('names', function() {
