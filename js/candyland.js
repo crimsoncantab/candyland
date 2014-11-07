@@ -8,7 +8,6 @@ angular.module('candy', [])
     $scope.player_names = ['Red','Blue','Green','Yellow']
     $scope.player_colors = canvas.player_colors;
     $scope.speed = 200;
-    $scope.num_games = 1000;
     var reset_graphics = function() {
         canvas.reset();
         for (var j = 0; j < $scope.num_players; j++) {canvas.render_position(j,0);}
