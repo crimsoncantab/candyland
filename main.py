@@ -1,7 +1,8 @@
-from bottle import route, run, view, static_file, redirect, request, response, default_app
+from bottle import route, run, view, static_file, redirect, request, response, default_app, debug
 from json import dumps
 import random,sys
 
+debug(True)
 @route('/candyland')
 def candyland():
     return static_file('sim.html', root='.')
@@ -29,19 +30,20 @@ class Deck(object):
         return card
 
 def get_move(board, position, card):
-        if (position in board.dots) and (board.dots[position] != card['color']): return position
+        if (position in board['dots']) and (board['dots'][position] != card['color']): return position
         c = card['color']
-        if (c in board.jumps): return board.jumps[c]
+        if (c in board['jumps']): return board['jumps'][c]
         num = 2 if card['double'] else 1
         for i in range(num):
             while True:
                 position += 1
-                if (position < len(board.spaces) - 1) and (board.spaces[position] != c):
+                if (position >= len(board['spaces']) - 1) or (board['spaces'][position] != c):
                     break
-        return board.bridges[position] if (position in board.bridges) else position
+        position = min(position, len(board['spaces']) - 1)
+        return board['bridges'][position] if (position in board['bridges']) else position
 
 def is_win(board, position):
-    return position == (len(board.spaces) - 1)
+    return position == (len(board['spaces']) - 1)
 
 class Game(object):
 
@@ -52,9 +54,10 @@ class Game(object):
         self.players = [0] * json['num_players']
     
     def play(self):
-        position, player = self._take_turn()
-        if is_win(self.board, position):
-            return player
+        while True:
+            position, player = self._take_turn()
+            if is_win(self.board, position):
+                return player
 
     def _take_turn(self):
         card = self.deck.draw()
@@ -67,17 +70,14 @@ class Game(object):
     
 @route('/simulate', method='POST')
 def simulate():
-    try:
-        num_games = request.json['num_games']
-        print(num_games)
-        wins = [1] * request.json['num_players']
-        for i in num_games:
-            game = Game(json)
-            wins[game.play()]+= 1
-        response.content_type = 'application/json'
-        return dumps(wins)
-    except Exception as e:
-        print(sys.exec_info())
+    num_games = request.json['num_games']
+    print(request.json)
+    wins = [0] * request.json['num_players']
+    for i in range(num_games):
+        game = Game(request.json)
+        wins[game.play()]+= 1
+    response.content_type = 'application/json'
+    return dumps(wins)
 
 @route('/<folder:re:(css|fonts|js|images)>/<path:path>')
 def static(folder, path):
