@@ -102,6 +102,7 @@ angular.module('candy', [])
         for (var i = 0; i < num; i++) {
             do {position++;} while(position < this.spaces.length - 1 && this.spaces[position] != c);
         }
+        position = Math.min(position, this.spaces.length -1);
         return (position in this.bridges ? this.bridges[position] : position)
     }
 
@@ -153,7 +154,7 @@ angular.module('candy', [])
         deck_obj.draw_card = function() {
             var card = this._deck[this._index];
             this._index++;
-            if (this._index > this._deck.length) this.reshuffle();
+            if (this._index == this._deck.length) this.reshuffle();
             return card;
         }
         return deck_obj;
