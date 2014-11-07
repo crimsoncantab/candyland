@@ -78,13 +78,13 @@
                                     <input type="number" min="50" max="2000" class="form-control" ng-model="speed">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div ng-hide="stop" class="form-group">
                                 <label class="col-sm-4 control-label">Games</label>
                                 <div class="col-sm-4">
                                     <input type="number" min="1" max="1000000" class="form-control" ng-model="num_games" placeholder="# of Games">
                                 </div>
                                 <div class="col-sm-4">
-                                    <button ng-hide="stop" class="btn btn-primary" type="button" ng-click="request_sim();">Simulate</button>
+                                    <button class="btn btn-primary" type="button" ng-click="request_sim();">Simulate</button>
                                 </div>
                             </div>
                             <!--div class="form-group">
