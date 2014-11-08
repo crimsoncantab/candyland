@@ -1,11 +1,6 @@
 #!/usr/bin/python2.7
 
 import random
-ids = tuple(range(14))
-start, red, purple, yellow, blue, orange, green, plumpy, mint, jolly, nut, lolly, frostine, end = ids
-colors = (red, purple, yellow, blue, orange, green)
-characters = (plumpy, mint, jolly, nut, lolly, frostine)
-
 
 
 class Card(object):
@@ -14,17 +9,22 @@ class Card(object):
         self.double = double
 
 
+ids = tuple(range(14))
+start, red, purple, yellow, blue, orange, green, plumpy, mint, jolly, nut, lolly, frostine, end = ids
+colors = (red, purple, yellow, blue, orange, green)
+characters = (plumpy, mint, jolly, nut, lolly, frostine)
 color_cards = [Card(c) for c in colors]
 double_cards = [Card(c, True) for c in colors]
 character_cards = [Card(c) for c in characters]
 cards = color_cards + double_cards + character_cards
 card_ids = tuple(range(len(cards)))
 
+
 class Deck(object):
     _master_deck = []
-    _master_deck.extend(color_cards * 8)
-    _master_deck.extend(double_cards * 2)
-    _master_deck.extend(character_cards)
+    _master_deck.extend(range(len(color_cards)) * 8)
+    _master_deck.extend(range(len(color_cards), len(color_cards) + len(double_cards)) * 2)
+    _master_deck.extend(range(len(color_cards) + len(double_cards), len(cards)))
 
     def __init__(self, shuffle=True):
         self.cards = list(Deck._master_deck)
@@ -45,8 +45,7 @@ class Deck(object):
 
 
 class Board(object):
-
-    jumps = {c:n for (c,n) in zip(characters, (9, 18, 43, 75, 96, 104))}
+    jumps = {c: n for (c, n) in zip(characters, (9, 18, 43, 75, 96, 104))}
 
     spaces = [start]
     spaces.extend(colors * 21)
@@ -77,9 +76,9 @@ class Board(object):
     def is_win(cls, pos):
         return cls.spaces[pos] == end
 
-board_matrix = [{c:Board.get_move(pos, c) for c in cards} for pos in range(len(Board.spaces))]
-# board_matrix = {(pos, c):Board.get_move(pos, c) for c in cards for pos in range(len(Board.spaces))}
-# print(board_matrix)
+
+board_matrix = [[Board.get_move(pos, cards[i]) for i in card_ids] for pos in range(len(Board.spaces))]
+
 
 class Game(object):
     def __init__(self, num_players):
@@ -101,13 +100,13 @@ class Game(object):
         card = self.deck.draw()
         player = self.turn
         position = board_matrix[self.players[player]][card]
-        # position = board_matrix[(self.players[player], card)]
         self.players[player] = position
         self.turn = (player + 1) % len(self.players)
         return position, player
 
+
 if __name__ == '__main__':
-    game = Game(2)
-    for i in range(10000):
+    game = Game(4)
+    for i in range(100000):
         game.begin()
         game.play()
