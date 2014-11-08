@@ -1,6 +1,8 @@
-import random
+#!/usr/bin/python2.7
 
-start, red, purple, yellow, blue, orange, green, plumpy, mint, jolly, nut, lolly, frostine, end = tuple(range(14))
+import random
+ids = tuple(range(14))
+start, red, purple, yellow, blue, orange, green, plumpy, mint, jolly, nut, lolly, frostine, end = ids
 colors = (red, purple, yellow, blue, orange, green)
 characters = (plumpy, mint, jolly, nut, lolly, frostine)
 
@@ -16,7 +18,7 @@ color_cards = [Card(c) for c in colors]
 double_cards = [Card(c, True) for c in colors]
 character_cards = [Card(c) for c in characters]
 cards = color_cards + double_cards + character_cards
-
+card_ids = tuple(range(len(cards)))
 
 class Deck(object):
     _master_deck = []
@@ -75,7 +77,8 @@ class Board(object):
     def is_win(cls, pos):
         return cls.spaces[pos] == end
 
-board_matrix = {(pos, c):Board.get_move(pos, c) for c in cards for pos in range(len(Board.spaces))}
+board_matrix = [{c:Board.get_move(pos, c) for c in cards} for pos in range(len(Board.spaces))]
+# board_matrix = {(pos, c):Board.get_move(pos, c) for c in cards for pos in range(len(Board.spaces))}
 # print(board_matrix)
 
 class Game(object):
@@ -97,7 +100,14 @@ class Game(object):
     def _take_turn(self):
         card = self.deck.draw()
         player = self.turn
-        position = board_matrix[(self.players[player], card)]
+        position = board_matrix[self.players[player]][card]
+        # position = board_matrix[(self.players[player], card)]
         self.players[player] = position
         self.turn = (player + 1) % len(self.players)
         return position, player
+
+if __name__ == '__main__':
+    game = Game(2)
+    for i in range(10000):
+        game.begin()
+        game.play()
