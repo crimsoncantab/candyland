@@ -1,3 +1,4 @@
+#!/usr/bin/python2.7
 from bottle import route, run, view, static_file, redirect, request, response, default_app, debug
 from json import dumps
 import random,sys
@@ -85,3 +86,5 @@ def static(folder, path):
 
 app = default_app()
 
+if __name__ == '__main__':
+    app.run(host='localhost', port=80)
