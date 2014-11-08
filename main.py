@@ -2,11 +2,6 @@
 
 from bottle import route, run, view, static_file, redirect, request, response, default_app
 
-
-@route('/candyland')
-def candyland():
-    return static_file('sim.html', root='.')
-
 @route('/candy')
 def candyland():
     return static_file('candyland.html', root='.')
