@@ -4,9 +4,6 @@ from json import dumps
 import random,sys
 
 debug(True)
-@route('/candyland')
-def candyland():
-    return static_file('sim.html', root='.')
 
 @route('/candy')
 def candyland():
